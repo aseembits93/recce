@@ -1,4 +1,5 @@
 import os
+from functools import lru_cache
 
 import requests
 from packaging.version import Version
@@ -51,6 +52,7 @@ def get_runner():
     return None
 
 
+@lru_cache(maxsize=1)
 def get_version():
     version_file = os.path.normpath(os.path.join(os.path.dirname(__file__), "VERSION"))
     with open(version_file) as fh:
