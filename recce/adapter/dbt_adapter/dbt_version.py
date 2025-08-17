@@ -1,18 +1,18 @@
+from dbt import version as dbt_version
+from packaging import version as pkg_version
+
+
 class DbtVersion:
 
     def __init__(self):
-        from dbt import version as dbt_version
-
-        dbt_version = self.parse(dbt_version.__version__)
-        if dbt_version.is_prerelease:
-            dbt_version = self.parse(dbt_version.base_version)
-        self.dbt_version = dbt_version
+        dbt_ver = self.parse(dbt_version.__version__)
+        if dbt_ver.is_prerelease:
+            dbt_ver = self.parse(dbt_ver.base_version)
+        self.dbt_version = dbt_ver
 
     @staticmethod
     def parse(version: str):
-        from packaging import version as v
-
-        return v.parse(version)
+        return pkg_version.parse(version)
 
     def as_version(self, other):
         from packaging.version import Version
