@@ -77,8 +77,7 @@ def is_anonymous_tracking():
 
 
 def _get_sentry_dns():
-    dns_file = os.path.normpath(os.path.join(os.path.dirname(__file__), "SENTRY_DNS"))
-    with open(dns_file) as f:
+    with open(_dns_file) as f:
         dns = f.read().strip()
         return dns
 
@@ -301,3 +300,5 @@ def set_exception_tag(key, value):
 
 def get_system_timezone():
     return datetime.now(timezone.utc).astimezone().tzinfo
+
+_dns_file = os.path.join(os.path.dirname(__file__), "SENTRY_DNS")
