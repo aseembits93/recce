@@ -102,12 +102,18 @@ def _get_api_key():
         # For local testing purpose
         return os.getenv("RECCE_EVENT_API_KEY")
 
+    global _config_cache
+    if _config_cache is not None:
+        return _config_cache.get("event_api_key")
+
     config_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "CONFIG"))
     try:
         with open(config_file) as fh:
             config = pyml.load(fh)
-            return config.get("event_api_key")
+            _config_cache = config or {}
+            return _config_cache.get("event_api_key")
     except Exception:
+        _config_cache = {}
         return None
 
 
@@ -301,3 +307,5 @@ def set_exception_tag(key, value):
 
 def get_system_timezone():
     return datetime.now(timezone.utc).astimezone().tzinfo
+
+_config_cache = None
