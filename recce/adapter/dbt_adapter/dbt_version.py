@@ -1,12 +1,14 @@
+from dbt import version as dbt_version
+from packaging.version import Version, parse
+
+
 class DbtVersion:
 
     def __init__(self):
-        from dbt import version as dbt_version
-
-        dbt_version = self.parse(dbt_version.__version__)
-        if dbt_version.is_prerelease:
-            dbt_version = self.parse(dbt_version.base_version)
-        self.dbt_version = dbt_version
+        dbt_ver = parse(dbt_version.__version__)
+        if dbt_ver.is_prerelease:
+            dbt_ver = parse(dbt_ver.base_version)
+        self.dbt_version = dbt_ver
 
     @staticmethod
     def parse(version: str):
@@ -15,13 +17,11 @@ class DbtVersion:
         return v.parse(version)
 
     def as_version(self, other):
-        from packaging.version import Version
-
         if isinstance(other, Version):
             return other
         if isinstance(other, str):
-            return self.parse(other)
-        return self.parse(str(other))
+            return parse(other)
+        return parse(str(other))
 
     def __ge__(self, other):
         return self.dbt_version >= self.as_version(other)
