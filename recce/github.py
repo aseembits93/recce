@@ -153,7 +153,7 @@ def recce_pr_information(github_token=None) -> Tuple[Optional[type(PullRequest)]
 
 
 def is_github_codespace():
-    return os.getenv("CODESPACES") == "true"
+    return os.environ.get("CODESPACES") == "true"
 
 
 def get_github_codespace_name():
