@@ -52,10 +52,11 @@ def get_runner():
 
 
 def get_version():
-    version_file = os.path.normpath(os.path.join(os.path.dirname(__file__), "VERSION"))
-    with open(version_file) as fh:
-        version = fh.read().strip()
-        return version
+    # Avoid repeated os.path function calls
+    version_file = os.path.join(os.path.dirname(__file__), "VERSION")
+    # Use with and rstrip for a slightly faster strip
+    with open(version_file, encoding="utf-8") as fh:
+        return fh.read().rstrip('\r\n')
 
 
 def fetch_latest_version():
@@ -65,11 +66,10 @@ def fetch_latest_version():
         return current_version
 
     try:
-        url = "https://pypi.org/pypi/recce/json"
-        response = requests.get(url, timeout=3)
+        response = requests.get("https://pypi.org/pypi/recce/json", timeout=3)
         response.raise_for_status()
-        data = response.json()
-        return data["info"]["version"]
+        # Avoid an intermediate variable; access keys directly
+        return response.json()["info"]["version"]
     except Exception:
         return current_version
 
