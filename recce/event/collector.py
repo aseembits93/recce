@@ -131,9 +131,10 @@ class Collector:
                 f.write(json.dumps({"unsend_events": []}))
 
     def _is_full(self):
-        with portalocker.Lock(self._unsend_events_file, "r+", timeout=5) as f:
-            o = json.loads(f.read())
-            return len(o.get("unsend_events", [])) >= self._upload_threshold
+        with portalocker.Lock(self._unsend_events_file, "r", timeout=5) as f:
+            data = f.read()
+        o = json.loads(data)
+        return len(o.get("unsend_events", [])) >= self._upload_threshold
 
     @contextmanager
     def load_json(self):
