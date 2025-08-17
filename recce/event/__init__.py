@@ -154,15 +154,15 @@ def flush_events(command=None):
 
 
 def should_log_event():
+    if not _collector.is_ready():
+        return False
+
     with open(RECCE_USER_PROFILE, "r") as f:
         user_profile = pyml.load(f)
     # TODO: default anonymous_tracking to false if field is not present
     tracking = user_profile.get("anonymous_tracking", False)
     tracking = tracking and isinstance(tracking, bool)
     if not tracking:
-        return False
-
-    if not _collector.is_ready():
         return False
 
     return True
