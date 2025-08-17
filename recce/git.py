@@ -14,9 +14,10 @@ def current_default_branch():
 def current_branch():
     try:
         repo = Repo(search_parent_directories=True)
-        if not repo.active_branch:
+        branch = repo.active_branch
+        if not branch:
             return None
-        return repo.active_branch.name
+        return branch.name
     except TypeError:
         # happened when HEAD is a detached symbolic reference
         return None
