@@ -189,8 +189,12 @@ class RecceContext:
             )
             return hashlib.sha256(payload.encode()).hexdigest()
 
-        checksum_map = {_calculate_checksum(c): c for c in self.checks if c.is_preset}
-        check_map = {c.check_id: c for c in self.checks}
+        checksum_map = {}
+        check_map = {}
+        for c in self.checks:
+            check_map[c.check_id] = c
+            if c.is_preset:
+                checksum_map[_calculate_checksum(c)] = c
 
         # merge checks
         for imported in import_checks:
