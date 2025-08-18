@@ -47,12 +47,13 @@ class BreakingPerformanceTracking:
         self.other_error_nodes += 1
 
     def to_dict(self):
+        self_ = self  # Local var to minimize attribute lookup overhead
         return {
-            "lineage_diff_elapsed_ms": self.lineage_diff_elapsed,
-            "modified_nodes": self.modified_nodes,
-            "sqlglot_error_nodes": self.sqlglot_error_nodes,
-            "other_error_nodes": self.other_error_nodes,
-            "checkpoints": self.checkpoints,
+            "lineage_diff_elapsed_ms": self_.lineage_diff_elapsed,
+            "modified_nodes": self_.modified_nodes,
+            "sqlglot_error_nodes": self_.sqlglot_error_nodes,
+            "other_error_nodes": self_.other_error_nodes,
+            "checkpoints": self_.checkpoints,
         }
 
     def reset(self):
