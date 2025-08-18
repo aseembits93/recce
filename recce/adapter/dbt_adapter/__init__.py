@@ -35,6 +35,7 @@ from recce.util.perf_tracking import LineagePerfTracker
 
 from ...tasks.profile import ProfileTask
 from ...util.breaking import BreakingPerformanceTracking, parse_change_category
+from recce.adapter.base import BaseAdapter
 
 try:
     import agate
@@ -306,9 +307,7 @@ class DbtAdapter(BaseAdapter):
     base_env_observer = Observer()
 
     def support_tasks(self):
-        support_map = {run_type.value: True for run_type in dbt_supported_registry}
-
-        return support_map
+        return _support_map.copy()
 
     @classmethod
     def load(cls, no_artifacts=False, review=False, **kwargs):
@@ -1665,3 +1664,5 @@ class DbtAdapter(BaseAdapter):
 
     def __eq__(self, other):
         return self.__hash__() == other.__hash__()
+
+_support_map = {run_type.value: True for run_type in dbt_supported_registry}
