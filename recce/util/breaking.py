@@ -33,9 +33,11 @@ class BreakingPerformanceTracking:
         self.checkpoints[label] = (time.perf_counter_ns() - self.lineage_diff_start) / 1000000
 
     def end_lineage_diff(self):
-        if self.lineage_diff_start is None:
+        lineage_diff_start = self.lineage_diff_start
+        if lineage_diff_start is None:
             return
-        self.lineage_diff_elapsed = (time.perf_counter_ns() - self.lineage_diff_start) / 1000000
+        # Avoid attribute lookups in tight loop, use local reference and direct integer division for speed
+        self.lineage_diff_elapsed = (time.perf_counter_ns() - lineage_diff_start) // 1_000_000
 
     def increment_modified_nodes(self):
         self.modified_nodes += 1
