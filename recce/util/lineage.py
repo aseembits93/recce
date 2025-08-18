@@ -27,18 +27,20 @@ def find_downstream(node_ids: Iterable, child_map):
     visited = set()
     downstream = set()
 
-    def dfs(current):
-        if current in visited:
-            return
-        visited.add(current)
+    stack = []
+    for node_id in node_ids:
+        stack.append(node_id)
 
+    while stack:
+        current = stack.pop()
+        if current in visited:
+            continue
+        visited.add(current)
         children = child_map.get(current, [])
         for child in children:
             downstream.add(child)
-            dfs(child)
-
-    for node_id in node_ids:
-        dfs(node_id)
+            if child not in visited:
+                stack.append(child)
 
     return downstream
 
