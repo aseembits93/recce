@@ -71,13 +71,16 @@ def filter_dependency_maps(
 ) -> Tuple[Dict[str, Set], Dict[str, Set]]:
     p_map = {}
     c_map = {}
-    for node_id, parents in parent_map.items():
-        if node_id in relevant_ids:
-            p_map[node_id] = {p for p in parents if p in relevant_ids}
+    
+    for node_id in relevant_ids:
+        parents = parent_map.get(node_id)
+        if parents is not None:
+            p_map[node_id] = parents & relevant_ids if isinstance(parents, set) else set(parents) & relevant_ids
 
-    for node_id, children in child_map.items():
-        if node_id in relevant_ids:
-            c_map[node_id] = {c for c in children if c in relevant_ids}
+    for node_id in relevant_ids:
+        children = child_map.get(node_id)
+        if children is not None:
+            c_map[node_id] = children & relevant_ids if isinstance(children, set) else set(children) & relevant_ids
 
     return p_map, c_map
 
