@@ -25,12 +25,11 @@ logger = logging.getLogger("uvicorn")
 
 
 def s3_sse_c_headers(password: str) -> Dict[str, str]:
-    hashed_password = sha256()
-    md5_hash = md5()
-    hashed_password.update(password.encode())
-    md5_hash.update(hashed_password.digest())
-    encoded_passwd = b64encode(hashed_password.digest()).decode("utf-8")
-    encoded_md5 = b64encode(md5_hash.digest()).decode("utf-8")
+    pw_bytes = password.encode()
+    sha_val = sha256(pw_bytes).digest()
+    md5_val = md5(sha_val).digest()
+    encoded_passwd = b64encode(sha_val).decode("utf-8")
+    encoded_md5 = b64encode(md5_val).decode("utf-8")
     return {
         "x-amz-server-side-encryption-customer-algorithm": "AES256",
         "x-amz-server-side-encryption-customer-key": encoded_passwd,
