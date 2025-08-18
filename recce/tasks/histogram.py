@@ -82,11 +82,12 @@ sql_not_supported_types_pattern = [
 
 
 def _is_histogram_supported(column_type):
-    if column_type.upper() in sql_not_supported_types:
+    column_type_upper = column_type.upper()
+    if column_type_upper in sql_not_supported_types_set:
         return False
 
-    for pattern in sql_not_supported_types_pattern:
-        if re.match(pattern, column_type.upper()):
+    for pattern in sql_not_supported_types_compiled:
+        if pattern.match(column_type_upper):
             return False
     return True
 
@@ -431,3 +432,7 @@ class HistogramDiffCheckValidator(CheckValidator):
             HistogramDiffParams(**check.params)
         except Exception as e:
             raise ValueError(f"Invalid check: {str(e)}")
+
+sql_not_supported_types_set = set(s.upper() for s in sql_not_supported_types)
+
+sql_not_supported_types_compiled = [re.compile(pattern) for pattern in sql_not_supported_types_pattern]
