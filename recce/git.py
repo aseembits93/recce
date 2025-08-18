@@ -1,16 +1,23 @@
 import os
 
 from git import InvalidGitRepositoryError, Repo
+from functools import lru_cache
 
 
 def current_default_branch():
     try:
+        # Performance: Avoid accessing refs by string lookup and chained attribute dereferencing.
+        # Instead, parse symbolic-ref directly for better performance.
         repo = Repo(search_parent_directories=True)
-        return repo.remotes.origin.refs["HEAD"].reference.remote_head
+        head_ref = repo.git.symbolic_ref('refs/remotes/origin/HEAD')
+        # Parse branch name from 'refs/remotes/origin/branch_name'
+        remote_head = head_ref.rsplit('/', 1)[-1]
+        return remote_head
     except Exception:
         return None
 
 
+@lru_cache(maxsize=1)
 def current_branch():
     try:
         repo = Repo(search_parent_directories=True)
@@ -75,3 +82,16 @@ def hosting_repo(remote: str = "origin"):
         return os.path.basename(toplevel_dir)
     except InvalidGitRepositoryError:
         return None
+
+@lru_cache(maxsize=1)
+def _cached_repo():
+    return Repo(search_parent_directories=True)
+
+@lru_cache(maxsize=1)
+def _cached_repo():
+    return Repo(search_parent_directories=True)
+
+
+@lru_cache(maxsize=1)
+def _cached_repo():
+    return Repo(search_parent_directories=True)
