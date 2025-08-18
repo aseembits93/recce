@@ -35,6 +35,8 @@ from recce.util.perf_tracking import LineagePerfTracker
 
 from ...tasks.profile import ProfileTask
 from ...util.breaking import BreakingPerformanceTracking, parse_change_category
+from dbt.contracts.graph.nodes import ManifestNode
+from recce.adapter.base import BaseAdapter
 
 try:
     import agate
@@ -532,7 +534,7 @@ class DbtAdapter(BaseAdapter):
     def find_node_by_name(self, node_name, base=False) -> Optional[ManifestNode]:
         manifest = self.curr_manifest if base is False else self.base_manifest
 
-        for key, node in manifest.nodes.items():
+        for node in manifest.nodes.values():
             if node.name == node_name:
                 return node
 
