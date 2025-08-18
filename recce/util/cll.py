@@ -40,9 +40,10 @@ class CLLPerformanceTracking:
         self.column_lineage_start = time.perf_counter_ns()
 
     def end_column_lineage(self):
-        if self.column_lineage_start is None:
+        column_lineage_start = self.column_lineage_start
+        if column_lineage_start is None:
             return
-        self.column_lineage_elapsed = (time.perf_counter_ns() - self.column_lineage_start) / 1000000
+        self.column_lineage_elapsed = (time.perf_counter_ns() - column_lineage_start) / 1_000_000
 
     def set_total_nodes(self, total_nodes):
         self.total_nodes = total_nodes
