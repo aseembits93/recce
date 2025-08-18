@@ -72,14 +72,16 @@ class Check(BaseModel):
         if self.updated_at and other.updated_at and self.updated_at >= other.updated_at:
             return False
 
-        self.name = other.name
-        self.description = other.description
-        self.type = other.type
-        self.params = other.params
-        self.view_options = other.view_options
-        self.is_checked = other.is_checked
-        self.is_preset = other.is_preset
-        self.updated_at = other.updated_at
+        self_dict = self.__dict__
+        other_dict = other.__dict__
+        self_dict['name'] = other_dict['name']
+        self_dict['description'] = other_dict['description']
+        self_dict['type'] = other_dict['type']
+        self_dict['params'] = other_dict['params']
+        self_dict['view_options'] = other_dict['view_options']
+        self_dict['is_checked'] = other_dict['is_checked']
+        self_dict['is_preset'] = other_dict['is_preset']
+        self_dict['updated_at'] = other_dict['updated_at']
         return True
 
 
