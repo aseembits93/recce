@@ -120,7 +120,7 @@ def _dedeup_depends_on(depends_on: List[CllColumnDep]) -> List[CllColumnDep]:
     dedup_set = set()
     dedup_list = []
     for col_dep in depends_on:
-        node_col = col_dep.node + "." + col_dep.column
+        node_col = (col_dep.node, col_dep.column)
         if node_col not in dedup_set:
             dedup_list.append(col_dep)
             dedup_set.add(node_col)
