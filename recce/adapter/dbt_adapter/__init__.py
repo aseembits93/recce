@@ -35,6 +35,7 @@ from recce.util.perf_tracking import LineagePerfTracker
 
 from ...tasks.profile import ProfileTask
 from ...util.breaking import BreakingPerformanceTracking, parse_change_category
+from recce.adapter.base import BaseAdapter
 
 try:
     import agate
@@ -524,10 +525,7 @@ class DbtAdapter(BaseAdapter):
     def is_python_model(self, node_id: str, base: Optional[bool] = False):
         manifest = self.curr_manifest if base is False else self.base_manifest
         model = manifest.nodes.get(node_id)
-        if hasattr(model, "language"):
-            return model.language == "python"
-
-        return False
+        return getattr(model, "language", None) == "python"
 
     def find_node_by_name(self, node_name, base=False) -> Optional[ManifestNode]:
         manifest = self.curr_manifest if base is False else self.base_manifest
