@@ -7,18 +7,20 @@ def find_upstream(node_ids: Iterable, parent_map):
     visited = set()
     upstream = set()
 
-    def dfs(current):
+    stack = []
+    for node_id in node_ids:
+        stack.append(node_id)
+
+    while stack:
+        current = stack.pop()
         if current in visited:
-            return
+            continue
         visited.add(current)
 
         parents = parent_map.get(current, [])
         for parent in parents:
             upstream.add(parent)
-            dfs(parent)
-
-    for node_id in node_ids:
-        dfs(node_id)
+            stack.append(parent)
 
     return upstream
 
