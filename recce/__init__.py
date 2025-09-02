@@ -53,9 +53,9 @@ def get_runner():
 
 def get_version():
     version_file = os.path.normpath(os.path.join(os.path.dirname(__file__), "VERSION"))
-    with open(version_file) as fh:
+    with open(version_file, 'rb') as fh:
         version = fh.read().strip()
-        return version
+        return version.decode('utf-8')
 
 
 def fetch_latest_version():
